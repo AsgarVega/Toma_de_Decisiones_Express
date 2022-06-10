@@ -31,6 +31,6 @@ Route::get('/calcular', function(){
 Route::post('/calcular',[TablaController::class, 'procesar']);
 //apartado de Gazga
 
-Route::get('/gazga', function() {
+Route::get('/test', function() {
     return view('gazga.home');
 });

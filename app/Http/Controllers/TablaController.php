@@ -129,6 +129,7 @@ class TablaController  extends Controller
             for ($j=0; $j < $e_size; $j++)
                 $matrizU[$i][$j]=round(1-pow($euler,(-1*($tabla[$i][$j]/$r))),2);    
         }
+        //datos a graficar
         
         ///E[R(u)]=sum(j)->{U_ij*p_j}
         $ERu=array();
@@ -155,8 +156,11 @@ class TablaController  extends Controller
 
         $headers=array();
         $datos=array();
+        $print='No :\'(';
         $resultado='holi :3';
         $headers[0]='Decision/Estado';
+        $linearX=array();
+        $linearU=array();
         for ($i=1; $i <= $e_size ; $i++) { 
             $headers[$i]='e<sub>'.$i.'</sub>';
         }
@@ -303,6 +307,7 @@ class TablaController  extends Controller
                 $temp=(array_search(max($ERu),$ERu)+1);
                 
                 //Plasmamos el resultado
+                $print='SI';
                 $resultado=
                     'Criterio de utilidad.<br>R: a<sub>'.$temp
                     .'<br>y un valor de '.(max($ERu));
@@ -319,6 +324,16 @@ class TablaController  extends Controller
                         );
                 }
                 $datos[$a_size]=array_merge(array('Prob.'),$probabilidades,array('','Prob.'),$probabilidades);
+
+                //bajamos de 2d a 1d los tanto X_ij como U_ij
+                for ($i=0; $i <$a_size ; $i++) { 
+                    $linearX=array_merge($linearX,$tabla[$i]);
+                    $linearU=array_merge($linearU,$matrizU[$i]);
+                }
+                //reordenamos los datos
+                sort($linearX);
+                sort($linearU);
+                
             }
             break;
             case 8:{
@@ -348,7 +363,7 @@ class TablaController  extends Controller
 
         }
         // $datos[0]=array('x<sub>1</sub>','x<sub>2</sub>');
-        return view('resultados',['headers'=>$headers,'datos'=>$datos,'resultado'=>$resultado]);      
+        return view('resultados',['headers'=>$headers,'datos'=>$datos,'resultado'=>$resultado,'print'=>$print,'x'=>$linearX,'u'=>$linearU]);
     }
 
 }
